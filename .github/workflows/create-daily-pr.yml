@@ -2,7 +2,7 @@ name: Create Daily Fitness PR
 
 on:
   schedule:
-    - cron: '15 6 * * *'
+    - cron: '15 21 * * *'
   workflow_dispatch:
 
 permissions:
