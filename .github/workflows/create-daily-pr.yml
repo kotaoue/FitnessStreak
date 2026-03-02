@@ -12,6 +12,9 @@ permissions:
 jobs:
   create-pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,48 +23,25 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
-      - name: Create branch
+      # Required: create-pull-request needs a file change to create a branch and PR
+      - name: Create fitness log file
         env:
           DATE: ${{ steps.date.outputs.date }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git ls-remote --exit-code --heads origin "fitness/$DATE"; then
-            echo "Branch fitness/$DATE already exists on remote, skipping creation"
-          else
-            git checkout -b "fitness/$DATE"
-            git push origin "fitness/$DATE"
-          fi
+          mkdir -p fitness
+          printf '- [ ] ラジオ体操\n- [ ] ストレッチ\n- [ ] 筋トレ\n- [ ] ツボ押し\n' > "fitness/$DATE.md"
 
       - name: Create Pull Request
-        env:
-          DATE: ${{ steps.date.outputs.date }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-        run: |
-          if gh pr view "fitness/$DATE" --json number > /dev/null 2>&1; then
-            echo "PR already exists for fitness/$DATE, skipping creation"
-          else
-            cat > /tmp/pr-body.md << 'EOF'
-          - [ ] ラジオ体操
-          - [ ] ストレッチ
-          - [ ] 筋トレ
-          - [ ] ツボ押し
-          EOF
-            PR_NUMBER=$(gh api \
-              --method POST \
-              "/repos/$REPO/pulls" \
-              -f title="$DATE" \
-              -f body="$(cat /tmp/pr-body.md)" \
-              -f head="fitness/$DATE" \
-              -f base=main \
-              --jq '.number')
-            if [ -z "$PR_NUMBER" ]; then
-              echo "Failed to create pull request"
-              exit 1
-            fi
-            gh api \
-              --method POST \
-              "/repos/$REPO/issues/$PR_NUMBER/assignees" \
-              -f "assignees[]=kotaoue"
-          fi
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add fitness log for ${{ steps.date.outputs.date }}"
+          branch: "fitness/${{ steps.date.outputs.date }}"
+          title: "${{ steps.date.outputs.date }}"
+          body: |
+            - [ ] ラジオ体操
+            - [ ] ストレッチ
+            - [ ] 筋トレ
+            - [ ] ツボ押し
+          assignees: kotaoue
+          base: main
