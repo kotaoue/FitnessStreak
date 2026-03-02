@@ -37,6 +37,7 @@ jobs:
         env:
           DATE: ${{ steps.date.outputs.date }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
         run: |
           if gh pr view "fitness/$DATE" --json number > /dev/null 2>&1; then
             echo "PR already exists for fitness/$DATE, skipping creation"
@@ -47,10 +48,20 @@ jobs:
           - [ ] 筋トレ
           - [ ] ツボ押し
           EOF
-            gh pr create \
-              --title "$DATE" \
-              --body-file /tmp/pr-body.md \
-              --assignee kotaoue \
-              --base main \
-              --head "fitness/$DATE"
+            PR_NUMBER=$(gh api \
+              --method POST \
+              "/repos/$REPO/pulls" \
+              -f title="$DATE" \
+              -f body="$(cat /tmp/pr-body.md)" \
+              -f head="fitness/$DATE" \
+              -f base=main \
+              --jq '.number')
+            if [ -z "$PR_NUMBER" ]; then
+              echo "Failed to create pull request"
+              exit 1
+            fi
+            gh api \
+              --method POST \
+              "/repos/$REPO/issues/$PR_NUMBER/assignees" \
+              -f "assignees[]=kotaoue"
           fi
