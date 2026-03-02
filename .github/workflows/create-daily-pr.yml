@@ -23,6 +23,8 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
+      # peter-evans/create-pull-request@v6 はワークスペースにファイルの変更がないと
+      # ブランチもPRも作成しないため、コミット対象としてフィットネスログファイルを作成する
       - name: Create fitness log file
         env:
           DATE: ${{ steps.date.outputs.date }}
