@@ -17,7 +17,6 @@ result = {
     }
 }
 
-os.makedirs('results', exist_ok=True)
 with open(f'results/{date}.json', 'w', encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False, indent=2)
     f.write('\n')
