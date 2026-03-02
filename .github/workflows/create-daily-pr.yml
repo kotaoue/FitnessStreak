@@ -26,23 +26,31 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "fitness/$DATE"
-          git push origin "fitness/$DATE"
+          if git ls-remote --exit-code --heads origin "fitness/$DATE"; then
+            echo "Branch fitness/$DATE already exists on remote, skipping creation"
+          else
+            git checkout -b "fitness/$DATE"
+            git push origin "fitness/$DATE"
+          fi
 
       - name: Create Pull Request
         env:
           DATE: ${{ steps.date.outputs.date }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat > /tmp/pr-body.md << 'EOF'
+          if gh pr view "fitness/$DATE" --json number > /dev/null 2>&1; then
+            echo "PR already exists for fitness/$DATE, skipping creation"
+          else
+            cat > /tmp/pr-body.md << 'EOF'
           - [ ] ラジオ体操
           - [ ] ストレッチ
           - [ ] 筋トレ
           - [ ] ツボ押し
           EOF
-          gh pr create \
-            --title "$DATE" \
-            --body-file /tmp/pr-body.md \
-            --assignee kotaoue \
-            --base main \
-            --head "fitness/$DATE"
+            gh pr create \
+              --title "$DATE" \
+              --body-file /tmp/pr-body.md \
+              --assignee kotaoue \
+              --base main \
+              --head "fitness/$DATE"
+          fi
