@@ -28,12 +28,7 @@ jobs:
           DATE: ${{ steps.date.outputs.date }}
         run: |
           mkdir -p fitness
-          cat > "fitness/$DATE.md" << 'EOF'
-          - [ ] ラジオ体操
-          - [ ] ストレッチ
-          - [ ] 筋トレ
-          - [ ] ツボ押し
-          EOF
+          printf '- [ ] ラジオ体操\n- [ ] ストレッチ\n- [ ] 筋トレ\n- [ ] ツボ押し\n' > "fitness/$DATE.md"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
