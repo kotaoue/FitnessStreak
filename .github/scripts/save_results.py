@@ -11,8 +11,8 @@ if not title:
     sys.exit(1)
 
 if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', title):
-    print(f"ERROR: PR_TITLE '{title}' is not in YYYY-MM-DD format", file=sys.stderr)
-    sys.exit(1)
+    print(f"SKIP: PR_TITLE '{title}' is not in YYYY-MM-DD format")
+    sys.exit(0)
 
 
 def is_checked(exercise):

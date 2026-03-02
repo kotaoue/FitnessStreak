@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   save-results:
-    if: github.event.review.state == 'approved'
+    if: github.event.review.state == 'approved' && startsWith(github.event.pull_request.head.ref, 'fitness/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR branch
