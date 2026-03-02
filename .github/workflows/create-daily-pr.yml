@@ -23,13 +23,10 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
-      # Required: create-pull-request needs a file change to create a branch and PR
-      - name: Create fitness log file
+      - name: Create fitness result file
         env:
           DATE: ${{ steps.date.outputs.date }}
-        run: |
-          mkdir -p fitness
-          printf -- '- [ ] ラジオ体操\n- [ ] ストレッチ\n- [ ] 筋トレ\n- [ ] ツボ押し\n' > "fitness/$DATE.md"
+        run: python3 .github/scripts/create_initial.py
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
