@@ -20,16 +20,13 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
-      - name: Create branch and initial results file
+      - name: Create branch
         env:
           DATE: ${{ steps.date.outputs.date }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "fitness/$DATE"
-          python3 .github/scripts/create_initial_results.py
-          git add results/
-          git commit -m "Add fitness tracking for $DATE"
           git push origin "fitness/$DATE"
 
       - name: Create Pull Request
