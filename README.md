@@ -1,33 +1,31 @@
 # FitnessStreak
 
-毎日のフィットネス記録を自動的に GitHub で管理し、ストリークを継続するためのリポジトリです。
+Track and archive my daily fitness history to keep the streak alive.
 
-GitHub Actions が毎朝 PR を自動作成し、チェックボックスにチェックを入れてマージするだけで運動履歴が蓄積されます。過去1年分の活動が GitHub スタイルのヒートマップで可視化されます。
-
-## 概念図
+## Concept
 
 ```mermaid
 flowchart TD
-    A[毎朝 \n スケジュールトリガー] --> B[create-daily-pr workflow\nチェックボックス付き PR を自動作成]
-    B --> C[Daily PR\n- ラジオ体操\n- ストレッチ\n- 筋トレ\n- ツボ押し]
-    C --> D{運動した項目に\nチェックを入れてマージ}
-    D --> E[save-results workflow\nPR のチェックボックスを解析]
-    E --> F[results/YYYY-MM-DD.json\n運動記録を JSON で保存]
-    F --> G[generate-heatmap workflow\nJSON ファイルを集計して SVG 生成]
-    G --> H[results/heatmap.svg\n過去1年のヒートマップを更新]
+    A["⏰ Scheduled at 6:15 JST"] --> B["create-daily-pr workflow<br/>Creates a PR with checkboxes"]
+    B --> C["📋 Daily PR<br/>- ラジオ体操<br/>- ストレッチ<br/>- 筋トレ<br/>- ツボ押し"]
+    C --> D{"Check done exercises<br/>and merge"}
+    D --> E["save-results workflow<br/>Parses PR checkboxes"]
+    E --> F["📄 results/YYYY-MM-DD.json<br/>Saves exercise record"]
+    F --> G["generate-heatmap workflow<br/>Aggregates JSON → SVG"]
+    G --> H["📊 results/heatmap.svg<br/>Updates the heatmap"]
 ```
 
-## ワークフロー
+## Workflows
 
-| ワークフロー | トリガー | 処理内容 |
+| Workflow | Trigger | Description |
 | --- | --- | --- |
-| `create-daily-pr` | 毎朝 6:15 JST (スケジュール) | 当日付きのチェックボックス入り PR を自動作成 |
-| `save-results` | `fitness/*` ブランチの PR マージ時 | PR 本文のチェックボックスを解析し JSON に保存 |
-| `generate-heatmap` | `results/*.json` の push / 毎日 3:00 JST | 全 JSON を集計してヒートマップ SVG を生成・コミット |
+| `create-daily-pr` | Daily schedule at 6:15 JST | Creates a PR with exercise checkboxes for the day |
+| `save-results` | PR merged on `fitness/*` branch | Parses PR body checkboxes and saves results to JSON |
+| `generate-heatmap` | Push to `results/*.json` / daily at 3:00 JST | Aggregates all JSON files and commits an updated SVG heatmap |
 
-## データ構造
+## Data structure
 
-各日の記録は `results/YYYY-MM-DD.json` に以下の形式で保存されます。
+Each day's record is saved as `results/YYYY-MM-DD.json`:
 
 ```json
 {
