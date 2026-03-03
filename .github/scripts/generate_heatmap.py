@@ -21,9 +21,9 @@ TOP_PAD = 30    # space for title and month labels
 RIGHT_PAD = 36
 BOT_PAD = 28    # space for legend
 
-# Colour scale: 0–4 exercises done (light gray → deep red)
+# Colour scale: 0–4 exercises done (muted gray → deep red)
 COLORS = [
-    "#ebedf0",  # 0 – no activity
+    "#919ba1",  # 0 – no activity (muted gray, rgb(145,152,161))
     "#ffcba4",  # 1 – light orange
     "#ff8c61",  # 2 – orange
     "#e84545",  # 3 – vivid red
