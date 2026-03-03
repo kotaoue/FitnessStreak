@@ -23,7 +23,7 @@ BOT_PAD = 28    # space for legend
 
 # Colour scale: 0–4 exercises done (muted gray → deep red)
 COLORS = [
-    "#1a0000",  # 0 – no activity (near-black dark red)
+    "#330b0b",  # 0 – no activity (near-black dark red)
     "#4e1111",  # 1 – dark red
     "#812222",  # 2 – mid red
     "#b43434",  # 3 – bright-mid red
