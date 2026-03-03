@@ -135,7 +135,7 @@ def _render_cells(weeks: list[list[date]], today: date, data: dict[str, int]) ->
 
 
 def _render_legend(width: int) -> list[str]:
-    """Return SVG elements for the Less/More colour legend at the bottom.
+    """Return SVG elements for the Less/More color legend at the bottom.
 
     Args:
         width: Total SVG canvas width, used to right-align the legend.
