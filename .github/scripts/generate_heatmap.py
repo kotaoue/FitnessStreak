@@ -23,11 +23,11 @@ BOT_PAD = 28    # space for legend
 
 # Colour scale: 0–4 exercises done (muted gray → deep red)
 COLORS = [
-    "#919ba1",  # 0 – no activity (muted gray, rgb(145,152,161))
-    "#ffcba4",  # 1 – light orange
-    "#ff8c61",  # 2 – orange
-    "#e84545",  # 3 – vivid red
-    "#9b2335",  # 4 – deep red
+    "#1a0000",  # 0 – no activity (near-black dark red)
+    "#4e1111",  # 1 – dark red
+    "#812222",  # 2 – mid red
+    "#b43434",  # 3 – bright-mid red
+    "#e84545",  # 4 – vivid red
 ]
 
 DAY_LABELS = {1: "Mon", 3: "Wed", 5: "Fri"}  # row index → label (0 = Sun)
