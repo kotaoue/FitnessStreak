@@ -18,7 +18,7 @@ STEP = CELL + GAP
 
 LEFT_PAD = 28   # space for day-of-week labels
 TOP_PAD = 30    # space for title and month labels
-RIGHT_PAD = 8
+RIGHT_PAD = 36
 BOT_PAD = 28    # space for legend
 
 # Colour scale: 0–4 exercises done (light gray → deep red)
