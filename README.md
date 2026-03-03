@@ -2,6 +2,10 @@
 
 Track and archive my daily fitness history to keep the streak alive.
 
+## Heatmap
+
+![Fitness Heatmap](results/heatmap.svg)
+
 ## Workflows
 
 | Workflow | Trigger | Description |
@@ -25,12 +29,6 @@ Each day's record is saved as `results/YYYY-MM-DD.json`:
   }
 }
 ```
-
-## Heatmap
-
-![Fitness Heatmap](results/heatmap.svg)
-
-[results](./results/)
 
 ## Manual heatmap generation
 
