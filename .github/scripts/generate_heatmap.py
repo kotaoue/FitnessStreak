@@ -72,6 +72,95 @@ def build_grid(today: date) -> list[list[date]]:
     return weeks
 
 
+def _render_month_labels(weeks: list[list[date]]) -> list[str]:
+    """Return SVG text elements for month labels along the top of the grid.
+
+    Args:
+        weeks: The calendar grid produced by build_grid().
+
+    Returns:
+        A list of SVG element strings.
+    """
+    parts: list[str] = []
+    prev_month = None
+    for wi, week in enumerate(weeks):
+        m = week[0].month
+        if m != prev_month:
+            x = LEFT_PAD + wi * STEP
+            parts.append(f'<text x="{x}" y="{TOP_PAD - 4}">{MONTH_NAMES[m - 1]}</text>')
+            prev_month = m
+    return parts
+
+
+def _render_day_labels() -> list[str]:
+    """Return SVG text elements for day-of-week labels on the left of the grid.
+
+    Returns:
+        A list of SVG element strings.
+    """
+    parts: list[str] = []
+    for row, label in DAY_LABELS.items():
+        y = TOP_PAD + row * STEP + CELL - 1
+        parts.append(f'<text x="0" y="{y}" dominant-baseline="middle">{label}</text>')
+    return parts
+
+
+def _render_cells(weeks: list[list[date]], today: date, data: dict[str, int]) -> list[str]:
+    """Return SVG rect elements for every day cell in the grid.
+
+    Args:
+        weeks: The calendar grid produced by build_grid().
+        today: Cells after this date are skipped.
+        data: A mapping of ISO date strings to exercise counts (0–4).
+
+    Returns:
+        A list of SVG element strings.
+    """
+    parts: list[str] = []
+    for wi, week in enumerate(weeks):
+        x = LEFT_PAD + wi * STEP
+        for row, d in enumerate(week):
+            if d > today:
+                continue
+            y = TOP_PAD + row * STEP
+            key = d.isoformat()
+            count = data.get(key, 0)
+            color = COLORS[min(count, len(COLORS) - 1)]
+            tip = f"{key}: {count}/4"
+            parts.append(
+                f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}"'
+                f' rx="2" fill="{color}"><title>{tip}</title></rect>'
+            )
+    return parts
+
+
+def _render_legend(width: int) -> list[str]:
+    """Return SVG elements for the Less/More colour legend at the bottom.
+
+    Args:
+        width: Total SVG canvas width, used to right-align the legend.
+
+    Returns:
+        A list of SVG element strings.
+    """
+    parts: list[str] = []
+    legend_y = TOP_PAD + 7 * STEP + GAP + 6
+    legend_x = width - RIGHT_PAD - (len(COLORS) * STEP) - 26
+    parts.append(
+        f'<text x="{legend_x - 2}" y="{legend_y + CELL - 1}" dominant-baseline="middle">Less</text>'
+    )
+    for i, color in enumerate(COLORS):
+        lx = legend_x + 22 + i * STEP
+        parts.append(
+            f'<rect x="{lx}" y="{legend_y}" width="{CELL}" height="{CELL}" rx="2" fill="{color}"/>'
+        )
+    more_x = legend_x + 22 + len(COLORS) * STEP + 2
+    parts.append(
+        f'<text x="{more_x}" y="{legend_y + CELL - 1}" dominant-baseline="middle">More</text>'
+    )
+    return parts
+
+
 def generate_svg(data: dict[str, int]) -> str:
     """Render the heatmap as an SVG string.
 
@@ -89,70 +178,19 @@ def generate_svg(data: dict[str, int]) -> str:
     width = LEFT_PAD + n_weeks * STEP + RIGHT_PAD
     height = TOP_PAD + 7 * STEP + BOT_PAD
 
-    parts: list[str] = []
-
-    parts.append(
+    parts: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"'
-        f' viewBox="0 0 {width} {height}">'
-    )
-    parts.append(f'<rect width="{width}" height="{height}" rx="6" fill="#0d1117"/>')
-    parts.append(
+        f' viewBox="0 0 {width} {height}">',
+        f'<rect width="{width}" height="{height}" rx="6" fill="#0d1117"/>',
         '<style>text { font-family: -apple-system, BlinkMacSystemFont, '
-        '"Segoe UI", Helvetica, Arial, sans-serif; fill: #8b949e; font-size: 9px; }</style>'
-    )
-
-    # Total count header
-    parts.append(
+        '"Segoe UI", Helvetica, Arial, sans-serif; fill: #8b949e; font-size: 9px; }</style>',
         f'<text x="{LEFT_PAD}" y="11" font-size="9">'
-        f'{total} exercises in the last year</text>'
-    )
-
-    # Month labels along the top
-    prev_month = None
-    for wi, week in enumerate(weeks):
-        m = week[0].month
-        if m != prev_month:
-            x = LEFT_PAD + wi * STEP
-            parts.append(f'<text x="{x}" y="{TOP_PAD - 4}">{MONTH_NAMES[m - 1]}</text>')
-            prev_month = m
-
-    # Day-of-week labels on the left
-    for row, label in DAY_LABELS.items():
-        y = TOP_PAD + row * STEP + CELL - 1
-        parts.append(f'<text x="0" y="{y}" dominant-baseline="middle">{label}</text>')
-
-    # Grid cells
-    for wi, week in enumerate(weeks):
-        x = LEFT_PAD + wi * STEP
-        for row, d in enumerate(week):
-            if d > today:
-                continue
-            y = TOP_PAD + row * STEP
-            key = d.isoformat()
-            count = data.get(key, 0)
-            color = COLORS[min(count, len(COLORS) - 1)]
-            tip = f"{key}: {count}/4"
-            parts.append(
-                f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}"'
-                f' rx="2" fill="{color}"><title>{tip}</title></rect>'
-            )
-
-    # Less/More legend
-    legend_y = TOP_PAD + 7 * STEP + GAP + 6
-    legend_x = width - RIGHT_PAD - (len(COLORS) * STEP) - 26
-    parts.append(
-        f'<text x="{legend_x - 2}" y="{legend_y + CELL - 1}" dominant-baseline="middle">Less</text>'
-    )
-    for i, color in enumerate(COLORS):
-        lx = legend_x + 22 + i * STEP
-        parts.append(
-            f'<rect x="{lx}" y="{legend_y}" width="{CELL}" height="{CELL}" rx="2" fill="{color}"/>'
-        )
-    more_x = legend_x + 22 + len(COLORS) * STEP + 2
-    parts.append(
-        f'<text x="{more_x}" y="{legend_y + CELL - 1}" dominant-baseline="middle">More</text>'
-    )
-
+        f'{total} exercises in the last year</text>',
+    ]
+    parts.extend(_render_month_labels(weeks))
+    parts.extend(_render_day_labels())
+    parts.extend(_render_cells(weeks, today, data))
+    parts.extend(_render_legend(width))
     parts.append('</svg>')
     return "\n".join(parts)
 
