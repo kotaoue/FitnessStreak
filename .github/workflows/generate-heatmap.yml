@@ -1,0 +1,31 @@
+name: Generate Fitness Heatmap
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # 03:00 JST (UTC+9)
+  push:
+    branches: [main]
+    paths:
+      - 'results/*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate heatmap SVG
+        run: python3 .github/scripts/generate_heatmap.py
+
+      - name: Commit and push heatmap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/heatmap.svg
+          git diff --cached --quiet || git commit -m "Update fitness heatmap"
+          git push
