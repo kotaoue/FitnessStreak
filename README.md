@@ -22,10 +22,10 @@ Each day's record is saved as `results/YYYY-MM-DD.json`:
 {
   "date": "2026-01-01",
   "exercises": {
-    "ラジオ体操": true,
     "ストレッチ": true,
+    "ラジオ体操": true,
     "筋トレ": false,
-    "ツボ押し": true
+    "運動": true
   }
 }
 ```
