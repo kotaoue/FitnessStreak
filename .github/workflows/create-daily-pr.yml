@@ -36,9 +36,9 @@ jobs:
           branch: "fitness/${{ steps.date.outputs.date }}"
           title: "${{ steps.date.outputs.date }}"
           body: |
-            - [ ] ラジオ体操
             - [ ] ストレッチ
+            - [ ] ラジオ体操
             - [ ] 筋トレ
-            - [ ] ツボ押し
+            - [ ] 運動
           assignees: kotaoue
           base: main

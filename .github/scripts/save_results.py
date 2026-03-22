@@ -22,10 +22,10 @@ def is_checked(exercise):
 result = {
     "date": title,
     "exercises": {
-        "ラジオ体操": is_checked("ラジオ体操"),
         "ストレッチ": is_checked("ストレッチ"),
+        "ラジオ体操": is_checked("ラジオ体操"),
         "筋トレ": is_checked("筋トレ"),
-        "ツボ押し": is_checked("ツボ押し")
+        "運動": is_checked("運動")
     }
 }
 
