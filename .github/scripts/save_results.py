@@ -19,6 +19,13 @@ def is_checked(exercise):
     return bool(re.search(r'- \[[xX]\] ' + re.escape(exercise), body))
 
 
+def extract_comment(text):
+    lines = text.splitlines()
+    non_checkbox = [line for line in lines if not re.match(r'\s*- \[[ xX]\]', line)]
+    comment = '\n'.join(non_checkbox).strip()
+    return comment if comment else None
+
+
 result = {
     "date": title,
     "exercises": {
@@ -28,6 +35,10 @@ result = {
         "運動": is_checked("運動")
     }
 }
+
+comment = extract_comment(body)
+if comment:
+    result["comment"] = comment
 
 with open(f'results/{title}.json', 'w', encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False, indent=2)
