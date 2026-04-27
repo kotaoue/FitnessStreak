@@ -4,6 +4,7 @@
     "ストレッチ": false,
     "ラジオ体操": false,
     "筋トレ": false,
-    "運動": false
-  }
+    "運動": true
+  },
+  "comment": "飲み会で出社"
 }
