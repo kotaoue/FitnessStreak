@@ -3,7 +3,7 @@
   "exercises": {
     "ストレッチ": false,
     "ラジオ体操": false,
-    "筋トレ": false,
-    "運動": false
+    "筋トレ": true,
+    "運動": true
   }
 }
