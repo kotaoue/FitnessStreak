@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="753" height="149" viewBox="0 0 753 149">
 <rect width="753" height="149" rx="6" fill="#0d1117"/>
 <style>text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #8b949e; font-size: 9px; }</style>
-<text x="28" y="11" font-size="9">55 exercises in the last year</text>
+<text x="28" y="11" font-size="9">57 exercises in the last year</text>
 <text x="28" y="26">Apr</text>
 <text x="41" y="26">May</text>
 <text x="93" y="26">Jun</text>
@@ -385,7 +385,7 @@
 <rect x="704" y="30" width="11" height="11" rx="2" fill="#4e1111"><title>2026-04-26: 1/4</title></rect>
 <rect x="704" y="43" width="11" height="11" rx="2" fill="#4e1111"><title>2026-04-27: 1/4</title></rect>
 <rect x="704" y="56" width="11" height="11" rx="2" fill="#812222"><title>2026-04-28: 2/4</title></rect>
-<rect x="704" y="69" width="11" height="11" rx="2" fill="#330b0b"><title>2026-04-29: 0/4</title></rect>
+<rect x="704" y="69" width="11" height="11" rx="2" fill="#812222"><title>2026-04-29: 2/4</title></rect>
 <text x="624" y="139" dominant-baseline="middle">Less</text>
 <rect x="648" y="129" width="11" height="11" rx="2" fill="#330b0b"/>
 <rect x="661" y="129" width="11" height="11" rx="2" fill="#4e1111"/>
