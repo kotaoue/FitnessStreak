@@ -1,9 +1,9 @@
 {
   "date": "2026-05-01",
   "exercises": {
-    "ストレッチ": false,
+    "ストレッチ": true,
     "ラジオ体操": false,
-    "筋トレ": false,
+    "筋トレ": true,
     "運動": false
   }
 }
